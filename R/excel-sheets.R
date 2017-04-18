@@ -3,15 +3,14 @@
 #' @inheritParams read_excel
 #' @export
 #' @examples
-#' excel_sheets(system.file("extdata/datasets.xlsx", package = "readxl"))
-#' excel_sheets(system.file("extdata/datasets.xls", package = "readxl"))
+#' excel_sheets(readxl_example("datasets.xlsx"))
+#' excel_sheets(readxl_example("datasets.xls"))
 #'
 #' # To load all sheets in a workbook, use lapply
-#' path <- system.file("extdata/datasets.xls", package = "readxl")
+#' path <- readxl_example("datasets.xls")
 #' lapply(excel_sheets(path), read_excel, path = path)
 excel_sheets <- function(path) {
   path <- check_file(path)
-  ext <- tolower(tools::file_ext(path))
 
   switch(excel_format(path),
     xls =  xls_sheets(path),

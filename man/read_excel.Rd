@@ -2,38 +2,115 @@
 % Please edit documentation in R/read_excel.R
 \name{read_excel}
 \alias{read_excel}
+\alias{read_xls}
+\alias{read_xlsx}
 \title{Read xls and xlsx files.}
 \usage{
-read_excel(path, sheet = 1, col_names = TRUE, col_types = NULL, na = "",
-  skip = 0)
+read_excel(path, sheet = NULL, range = NULL, col_names = TRUE,
+  col_types = NULL, na = "", trim_ws = TRUE, skip = 0, n_max = Inf,
+  guess_max = min(1000, n_max))
+
+read_xls(path, sheet = NULL, range = NULL, col_names = TRUE,
+  col_types = NULL, na = "", trim_ws = TRUE, skip = 0, n_max = Inf,
+  guess_max = min(1000, n_max))
+
+read_xlsx(path, sheet = NULL, range = NULL, col_names = TRUE,
+  col_types = NULL, na = "", trim_ws = TRUE, skip = 0, n_max = Inf,
+  guess_max = min(1000, n_max))
 }
 \arguments{
 \item{path}{Path to the xls/xlsx file}
 
-\item{sheet}{Sheet to read. Either a string (the name of a sheet), or
-an integer (the position of the sheet). Defaults to the first sheet.}
+\item{sheet}{Sheet to read. Either a string (the name of a sheet), or an
+integer (the position of the sheet). Ignored if the sheet is specified via
+\code{range}. If neither argument specifies the sheet, defaults to the first
+sheet.}
 
-\item{col_names}{Either \code{TRUE} to use the first row as column names,
-\code{FALSE} to number columns sequentially from \code{X1} to \code{Xn},
-or a character vector giving a name for each column.}
+\item{range}{A cell range to read from, as described in \link{cell-specification}.
+Includes typical Excel ranges like "B3:D87", possibly including the sheet
+name like "Budget!B2:G14", and more. Interpreted strictly, even if the
+range forces the inclusion of leading or trailing empty rows or columns.
+Takes precedence over \code{skip}, \code{n_max} and \code{sheet}.}
 
-\item{col_types}{Either \code{NULL} to guess from the spreadsheet or a
-character vector containing "blank", "numeric", "date" or "text".}
+\item{col_names}{\code{TRUE} to use the first row as column names, \code{FALSE} to get
+default names, or a character vector giving a name for each column. If user
+provides \code{col_types} as a vector, \code{col_names} can have one entry per
+column, i.e. have the same length as \code{col_types}, or one entry per
+unskipped column.}
 
-\item{na}{Missing value. By default readxl converts blank cells to missing
-data. Set this value if you have used a sentinel value for missing values.}
+\item{col_types}{Either \code{NULL} to guess all from the spreadsheet or a
+character vector containing one entry per column from these options:
+"skip", "guess", "logical", "numeric", "date", "text" or "list". If exactly
+one \code{col_type} is specified, it will be recycled. The content of a cell in
+a skipped column is never read and that column will not appear in the data
+frame output. A list cell loads a column as a list of length 1 vectors,
+which are typed using the type guessing logic from \code{col_types = NULL}, but
+on a cell-by-cell basis.}
 
-\item{skip}{Number of rows to skip before reading any data.}
+\item{na}{Character vector of strings to use for missing values. By default,
+readxl treats blank cells as missing data.}
+
+\item{trim_ws}{Should leading and trailing whitespace be trimmed?}
+
+\item{skip}{Minimum number of rows to skip before reading anything, be it
+column names or data. Leading empty rows are automatically skipped, so this
+is a lower bound. Ignored if \code{range} is given.}
+
+\item{n_max}{Maximum number of data rows to read. Trailing empty rows are
+automatically skipped, so this is an upper bound on the number of rows in
+the returned tibble. Ignored if \code{range} is given.}
+
+\item{guess_max}{Maximum number of data rows to use for guessing column
+types.}
+}
+\value{
+A \link[tibble:tibble-package]{tibble}
 }
 \description{
 Read xls and xlsx files.
+
+While \code{read_excel()} auto detects the format from the file
+extension, \code{read_xls()} and \code{read_xlsx()} can be used to
+read files without extension.
 }
 \examples{
-datasets <- system.file("extdata/datasets.xlsx", package = "readxl")
+datasets <- readxl_example("datasets.xlsx")
 read_excel(datasets)
 
-# Specific sheet either by position or by name
+# Specify sheet either by position or by name
 read_excel(datasets, 2)
 read_excel(datasets, "mtcars")
-}
 
+# Skip rows and use default column names
+read_excel(datasets, skip = 148, col_names = FALSE)
+
+# Recycle a single column type
+read_excel(datasets, col_types = "text")
+
+# Specify some col_types and guess others
+read_excel(datasets, col_types = c("text", "guess", "numeric", "guess", "guess"))
+
+# Accomodate a column with disparate types via col_type = "list"
+df <- read_excel(readxl_example("clippy.xlsx"), col_types = c("text", "list"))
+df
+df$value
+sapply(df$value, class)
+
+# Limit the number of data rows read
+read_excel(datasets, n_max = 3)
+
+# Read from an Excel range using A1 or R1C1 notation
+read_excel(datasets, range = "C1:E7")
+read_excel(datasets, range = "R1C2:R2C5")
+
+# Specify the sheet as part of the range
+read_excel(datasets, range = "mtcars!B1:D5")
+
+# Read only specific rows or columns
+read_excel(datasets, range = cell_rows(102:151), col_names = FALSE)
+read_excel(datasets, range = cell_cols("B:D"))
+}
+\seealso{
+\link{cell-specification} for more details on targetting cells with the
+\code{range} argument
+}

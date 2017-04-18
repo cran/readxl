@@ -4,9 +4,14 @@
 /* Mask printf for CMD check */
 #include <Rinternals.h>
 #define printf Rprintf
-#define fprintf(err, ...) Rprintf(__VA_ARGS__)
-#define exit assert
+
+/* Rather than use variadic macros (which are a C99 feature) we are going to
+ * hard code a macro with only two additional arguments, as the only usage of
+ * fprintf uses two additional arguments.
+ */
+#define fprintf(err, msg, a1, a2) Rprintf(msg, a1, a2)
 #undef assert
 #define assert(X) if (X) {}
+#define exit assert
 
 #endif

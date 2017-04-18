@@ -121,8 +121,8 @@ struct drawHeader {
 static char *formData;
 static char *formFunc;
 static struct drawHeader drawProc(uint8_t *buf, uint32_t maxLen, uint32_t *off, int level);
-// static void dumpRec(char *comment, struct drawHeader *h, int len, uint8_t *buf);
-// static int finder(uint8_t *buf, uint32_t len, uint16_t pattern);
+static void dumpRec(char *comment, struct drawHeader *h, int len, uint8_t *buf);
+static int finder(uint8_t *buf, uint32_t len, uint16_t pattern);
 static uint32_t sheetOffset;
 #endif
 
@@ -509,6 +509,7 @@ struct st_cell_data *xls_addCell(xlsWorkSheet* pWS,BOF* bof,BYTE* buf)
 		if(formula_handler) formula_handler(bof->id, bof->size, buf);
         break;
     case XLS_RECORD_MULRK:
+// printf("MULRK: %d\n", bof->size);
         for (i = 0; i < (bof->size - 6)/6; i++)	// 6 == 2 row + 2 col + 2 trailing index
         {
             cell=&row->cells.cell[xlsShortVal(((MULRK*)buf)->col + i)];
@@ -530,7 +531,7 @@ struct st_cell_data *xls_addCell(xlsWorkSheet* pWS,BOF* bof,BYTE* buf)
         break;
     case XLS_RECORD_LABELSST:
     case XLS_RECORD_LABEL:
-		cell->str=xls_getfcell(pWS->workbook,cell,(WORD_UA *)&((LABEL*)buf)->value);
+		cell->str=xls_getfcell(pWS->workbook,cell,(BYTE *)&((LABEL*)buf)->value);
 		sscanf((char *)cell->str, "%d", &cell->l);
 		sscanf((char *)cell->str, "%lf", &cell->d);
 		break;
@@ -914,9 +915,11 @@ void xls_parseWorkBook(xlsWorkBook* pWB)
 			break;
 		
 		case XLS_RECORD_DEFINEDNAME:
-			printf("DEFINEDNAME: ");
-			for(int i=0; i<bof1.size; ++i) printf("%2.2x ", buf[i]);
-			printf("\n");
+			if(xls_debug) {
+				printf("DEFINEDNAME: ");
+				for(int i=0; i<bof1.size; ++i) printf("%2.2x ", buf[i]);
+				printf("\n");
+			}
 			break;
 			
 #ifdef DEBUG_DRAWINGS
@@ -1055,6 +1058,7 @@ void xls_parseWorkSheet(xlsWorkSheet* pWS)
     BOF tmp;
     BYTE* buf;
 	long offset = pWS->filepos;
+	// int continueRec = 0;
 
 	struct st_cell_data *cell;
 	xlsWorkBook *pWB = pWS->workbook;
@@ -1340,6 +1344,7 @@ void xls_parseWorkSheet(xlsWorkSheet* pWS)
 #endif
 
         default:
+		  // printBOF:
 			if(xls_debug)
 			{
 				//xls_showBOF(&tmp);
@@ -1448,7 +1453,7 @@ xlsCell	*xls_cell(xlsWorkSheet* pWS, WORD cellRow, WORD cellCol)
 
     if(cellRow > pWS->rows.lastrow) return NULL;
     row = &pWS->rows.row[cellRow];
-    if(cellCol >= row->lcell) return NULL;
+    if(cellCol > row->lcell) return NULL;
 
     return &row->cells.cell[cellCol];
 }
@@ -2079,7 +2084,6 @@ static struct drawHeader drawProc(uint8_t *buf, uint32_t maxLen, uint32_t *off_p
 	return head;
 }
 
-#if 0
 static void dumpData(char *data);
 static void dumpFunc(char *func);
 
@@ -2145,6 +2149,7 @@ static void dumpFunc(char *func)
 	free(oldStr);
 }
 
+#if 0
 static int finder(uint8_t *buf, uint32_t len, uint16_t pattern)
 {
 	int ret = 0;
