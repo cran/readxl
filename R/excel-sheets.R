@@ -1,4 +1,4 @@
-#' List all sheets in an excel spreadsheet.
+#' List all sheets in an excel spreadsheet
 #'
 #' @inheritParams read_excel
 #' @export
@@ -11,9 +11,10 @@
 #' lapply(excel_sheets(path), read_excel, path = path)
 excel_sheets <- function(path) {
   path <- check_file(path)
+  format <- check_format(path)
 
-  switch(excel_format(path),
-    xls =  xls_sheets(path),
+  switch(format,
+    xls = xls_sheets(path),
     xlsx = xlsx_sheets(path)
   )
 }

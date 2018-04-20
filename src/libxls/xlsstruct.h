@@ -33,6 +33,10 @@
 #ifndef XLS_STRUCT_INC
 #define XLS_STRUCT_INC
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "libxls/ole.h"
 
 #define XLS_RECORD_EOF          0x000A
@@ -101,7 +105,6 @@ typedef struct BIFF
     WORD year;
     DWORD flags;
     DWORD min_ver;
-    BYTE buf[100];
 }
 BIFF;
 
@@ -124,7 +127,7 @@ typedef struct BOUNDSHEET
     DWORD	filepos;
     BYTE	type;
     BYTE	visible;
-    BYTE	name[1];
+    char	name[];
 }
 BOUNDSHEET;
 
@@ -195,7 +198,7 @@ typedef struct MULRK
 	struct {
 		WORD	xf;
 		DWORD_UA value;
-	}		rk[1];
+	}		rk[];
 	//WORD	last_col;
 }
 MULRK;
@@ -204,7 +207,7 @@ typedef struct MULBLANK
 {
     WORD	row;
     WORD	col;
-    WORD	xf[1];
+    WORD	xf[];
 	//WORD	last_col;
 }
 MULBLANK;
@@ -222,7 +225,7 @@ typedef struct LABEL
     WORD	row;
     WORD	col;
     WORD	xf;
-    BYTE	value[1]; // var
+    BYTE	value[]; // var
 }
 LABEL;
 typedef LABEL LABELSST;
@@ -241,7 +244,7 @@ typedef struct SST
 {
     DWORD	num;
     DWORD	numofstr;
-    BYTE	strings;
+    BYTE	strings[];
 }
 SST;
 
@@ -313,14 +316,14 @@ typedef struct FONT
     BYTE	family;
     BYTE	charset;
     BYTE	notused;
-    BYTE	name;
+    char    name[];
 }
 FONT;
 
 typedef struct FORMAT
 {
     WORD	index;
-    BYTE	value[1];
+    char	value[];
 }
 FORMAT;
 
@@ -336,7 +339,7 @@ typedef	struct st_sheet
         DWORD filepos;
         BYTE visibility;
         BYTE type;
-        BYTE* name;
+        char * name;
     }
     * sheet;
 }
@@ -355,7 +358,7 @@ typedef	struct st_font
         BYTE	underline;
         BYTE	family;
         BYTE	charset;
-        BYTE*	name;
+        char *	name;
     }
     * font;
 }
@@ -367,7 +370,7 @@ typedef struct st_format
     struct st_format_data
     {
          WORD index;
-         BYTE *value;
+         char *value;
     }
     * format;
 }
@@ -405,7 +408,7 @@ typedef	struct st_sst
     DWORD lastsz;
     struct str_sst_string
     {
-        BYTE* str;
+        char * str;
     }
     * string;
 }
@@ -421,7 +424,7 @@ typedef	struct st_cell
         WORD	row;
         WORD	col;
         WORD	xf;
-        BYTE*	str;		// String value;
+        char *	str;		// String value;
         double	d;
         int32_t	l;
         WORD	width;		// Width of col
@@ -530,5 +533,9 @@ typedef struct xls_summaryInfo
 xlsSummaryInfo;
 
 typedef void (*xls_formula_handler)(WORD bof, WORD len, BYTE *formula);
+
+#ifdef __cplusplus
+} // extern c block
+#endif
 
 #endif

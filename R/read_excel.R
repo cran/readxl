@@ -2,9 +2,9 @@
 #' @importFrom Rcpp sourceCpp
 NULL
 
-#' Read xls and xlsx files.
+#' Read xls and xlsx files
 #'
-#' @param path Path to the xls/xlsx file
+#' @param path Path to the xls/xlsx file.
 #' @param sheet Sheet to read. Either a string (the name of a sheet), or an
 #'   integer (the position of the sheet). Ignored if the sheet is specified via
 #'   `range`. If neither argument specifies the sheet, defaults to the first
@@ -27,8 +27,8 @@ NULL
 #'   frame output. A list cell loads a column as a list of length 1 vectors,
 #'   which are typed using the type guessing logic from `col_types = NULL`, but
 #'   on a cell-by-cell basis.
-#' @param na Character vector of strings to use for missing values. By default,
-#'   readxl treats blank cells as missing data.
+#' @param na Character vector of strings to interpret as missing values. By
+#'   default, readxl treats blank cells as missing data.
 #' @param trim_ws Should leading and trailing whitespace be trimmed?
 #' @param skip Minimum number of rows to skip before reading anything, be it
 #'   column names or data. Leading empty rows are automatically skipped, so this
@@ -78,29 +78,35 @@ NULL
 #' # Read only specific rows or columns
 #' read_excel(datasets, range = cell_rows(102:151), col_names = FALSE)
 #' read_excel(datasets, range = cell_cols("B:D"))
+#'
+#' # Get a preview of column names
+#' names(read_excel(readxl_example("datasets.xlsx"), n_max = 0))
 read_excel <- function(path, sheet = NULL, range = NULL,
                        col_names = TRUE, col_types = NULL,
                        na = "", trim_ws = TRUE, skip = 0, n_max = Inf,
                        guess_max = min(1000, n_max)) {
+  path <- check_file(path)
+  format <- check_format(path)
   read_excel_(
     path = path, sheet = sheet, range = range,
     col_names = col_names, col_types = col_types,
     na = na, trim_ws = trim_ws, skip = skip,
     n_max = n_max, guess_max = guess_max,
-    excel_format(path)
+    format = format
   )
 }
 
-#' While `read_excel()` auto detects the format from the file
-#' extension, `read_xls()` and `read_xlsx()` can be used to
-#' read files without extension.
-#'
+#' `read_excel()` calls [excel_format()] to determine if `path` is xls or xlsx,
+#' based on the file extension and the file itself, in that order. Use
+#' `read_xls()` and `read_xlsx()` directly if you know better and want to
+#' prevent such guessing.
 #' @rdname read_excel
 #' @export
 read_xls <- function(path, sheet = NULL, range = NULL,
                      col_names = TRUE, col_types = NULL,
-                     na = "",  trim_ws = TRUE, skip = 0, n_max = Inf,
+                     na = "", trim_ws = TRUE, skip = 0, n_max = Inf,
                      guess_max = min(1000, n_max)) {
+  path <- check_file(path)
   read_excel_(
     path = path, sheet = sheet, range = range,
     col_names = col_names, col_types = col_types,
@@ -113,8 +119,9 @@ read_xls <- function(path, sheet = NULL, range = NULL,
 #' @export
 read_xlsx <- function(path, sheet = NULL, range = NULL,
                       col_names = TRUE, col_types = NULL,
-                      na = "",  trim_ws = TRUE, skip = 0, n_max = Inf,
+                      na = "", trim_ws = TRUE, skip = 0, n_max = Inf,
                       guess_max = min(1000, n_max)) {
+  path <- check_file(path)
   read_excel_(
     path = path, sheet = sheet, range = range,
     col_names = col_names, col_types = col_types,
@@ -125,7 +132,7 @@ read_xlsx <- function(path, sheet = NULL, range = NULL,
 
 read_excel_ <- function(path, sheet = NULL, range = NULL,
                         col_names = TRUE, col_types = NULL,
-                        na = "",  trim_ws = TRUE, skip = 0, n_max = Inf,
+                        na = "", trim_ws = TRUE, skip = 0, n_max = Inf,
                         guess_max = min(1000, n_max), format) {
   if (format == "xls") {
     sheets_fun <- xls_sheets
@@ -136,16 +143,20 @@ read_excel_ <- function(path, sheet = NULL, range = NULL,
   }
   sheet <- standardise_sheet(sheet, range, sheets_fun(path))
   shim <- !is.null(range)
-  limits <- standardise_limits(range, skip, n_max, has_col_names = isTRUE(col_names))
+  limits <- standardise_limits(
+    range, skip, n_max, has_col_names = isTRUE(col_names)
+  )
   col_types <- check_col_types(col_types)
   guess_max <- check_guess_max(guess_max)
   trim_ws <- check_bool(trim_ws, "trim_ws")
   tibble::repair_names(
     tibble::as_tibble(
-      read_fun(path = path, sheet = sheet,
-               limits = limits, shim = shim,
-               col_names = col_names, col_types = col_types,
-               na = na, trim_ws = trim_ws, guess_max = guess_max),
+      read_fun(
+        path = path, sheet_i = sheet,
+        limits = limits, shim = shim,
+        col_names = col_names, col_types = col_types,
+        na = na, trim_ws = trim_ws, guess_max = guess_max
+      ),
       validate = FALSE
     ),
     prefix = "X", sep = "__"
@@ -154,29 +165,15 @@ read_excel_ <- function(path, sheet = NULL, range = NULL,
 
 # Helper functions -------------------------------------------------------------
 
-excel_format <- function(path) {
-  ext <- tolower(tools::file_ext(path))
-
-  switch(
-    ext,
-    xls = "xls",
-    xlsx = "xlsx",
-    xlsm = "xlsx",
-    if (nzchar(ext)) {
-      stop("Unknown file extension: ", ext, call. = FALSE)
-    } else {
-      stop("Missing file extension.", call. = FALSE)
-    }
-  )
-}
-
 ## return a zero-indexed sheet number
 standardise_sheet <- function(sheet, range, sheet_names) {
   range_sheet <- cellranger::as.cell_limits(range)[["sheet"]]
   if (!is.null(range_sheet) && !is.na(range_sheet)) {
     if (!is.null(sheet)) {
-      message("Two values given for `sheet`. ",
-              "Using the `sheet` found in `range`:\n", range_sheet)
+      message(
+        "Two values given for `sheet`. ",
+        "Using the `sheet` found in `range`:\n", range_sheet
+      )
     }
     sheet <- range_sheet
   }
@@ -267,7 +264,7 @@ check_bool <- function(bool, arg_name) {
 
 check_non_negative_integer <- function(i, arg_name) {
   if (length(i) != 1 || !is.numeric(i) || !is_integerish(i) ||
-      is.na(i) || i < 0) {
+    is.na(i) || i < 0) {
     stop("`", arg_name, "` must be a positive integer", call. = FALSE)
   }
   i
@@ -277,8 +274,10 @@ check_non_negative_integer <- function(i, arg_name) {
 check_guess_max <- function(guess_max, max_limit = .Machine$integer.max %/% 100) {
   guess_max <- check_non_negative_integer(guess_max, "guess_max")
   if (guess_max > max_limit) {
-    warning("`guess_max` is a very large value, setting to `", max_limit,
-            "` to avoid exhausting memory", call. = FALSE)
+    warning(
+      "`guess_max` is a very large value, setting to `", max_limit,
+      "` to avoid exhausting memory", call. = FALSE
+    )
     guess_max <- max_limit
   }
   guess_max

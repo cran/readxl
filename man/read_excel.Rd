@@ -4,7 +4,7 @@
 \alias{read_excel}
 \alias{read_xls}
 \alias{read_xlsx}
-\title{Read xls and xlsx files.}
+\title{Read xls and xlsx files}
 \usage{
 read_excel(path, sheet = NULL, range = NULL, col_names = TRUE,
   col_types = NULL, na = "", trim_ws = TRUE, skip = 0, n_max = Inf,
@@ -19,7 +19,7 @@ read_xlsx(path, sheet = NULL, range = NULL, col_names = TRUE,
   guess_max = min(1000, n_max))
 }
 \arguments{
-\item{path}{Path to the xls/xlsx file}
+\item{path}{Path to the xls/xlsx file.}
 
 \item{sheet}{Sheet to read. Either a string (the name of a sheet), or an
 integer (the position of the sheet). Ignored if the sheet is specified via
@@ -47,8 +47,8 @@ frame output. A list cell loads a column as a list of length 1 vectors,
 which are typed using the type guessing logic from \code{col_types = NULL}, but
 on a cell-by-cell basis.}
 
-\item{na}{Character vector of strings to use for missing values. By default,
-readxl treats blank cells as missing data.}
+\item{na}{Character vector of strings to interpret as missing values. By
+default, readxl treats blank cells as missing data.}
 
 \item{trim_ws}{Should leading and trailing whitespace be trimmed?}
 
@@ -67,11 +67,12 @@ types.}
 A \link[tibble:tibble-package]{tibble}
 }
 \description{
-Read xls and xlsx files.
+Read xls and xlsx files
 
-While \code{read_excel()} auto detects the format from the file
-extension, \code{read_xls()} and \code{read_xlsx()} can be used to
-read files without extension.
+\code{read_excel()} calls \code{\link[=excel_format]{excel_format()}} to determine if \code{path} is xls or xlsx,
+based on the file extension and the file itself, in that order. Use
+\code{read_xls()} and \code{read_xlsx()} directly if you know better and want to
+prevent such guessing.
 }
 \examples{
 datasets <- readxl_example("datasets.xlsx")
@@ -109,6 +110,9 @@ read_excel(datasets, range = "mtcars!B1:D5")
 # Read only specific rows or columns
 read_excel(datasets, range = cell_rows(102:151), col_names = FALSE)
 read_excel(datasets, range = cell_cols("B:D"))
+
+# Get a preview of column names
+names(read_excel(readxl_example("datasets.xlsx"), n_max = 0))
 }
 \seealso{
 \link{cell-specification} for more details on targetting cells with the

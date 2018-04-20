@@ -2,15 +2,15 @@
 % Please edit documentation in R/excel-sheets.R
 \name{excel_sheets}
 \alias{excel_sheets}
-\title{List all sheets in an excel spreadsheet.}
+\title{List all sheets in an excel spreadsheet}
 \usage{
 excel_sheets(path)
 }
 \arguments{
-\item{path}{Path to the xls/xlsx file}
+\item{path}{Path to the xls/xlsx file.}
 }
 \description{
-List all sheets in an excel spreadsheet.
+List all sheets in an excel spreadsheet
 }
 \examples{
 excel_sheets(readxl_example("datasets.xlsx"))

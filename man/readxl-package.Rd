@@ -7,9 +7,9 @@
 \title{readxl: Read Excel Files}
 \description{
 Import excel files into R. Supports '.xls' via the embedded
-'libxls' C library <https://sourceforge.net/projects/libxls/> and '.xlsx' via
-the embedded 'RapidXML' C++ library <https://rapidxml.sourceforge.net>. Works on
-Windows, Mac and Linux without external dependencies.
+'libxls' C library <https://github.com/evanmiller/libxls> and '.xlsx' via
+the embedded 'RapidXML' C++ library <https://rapidxml.sourceforge.net>.
+Works on Windows, Mac and Linux without external dependencies.
 }
 \seealso{
 Useful links:
@@ -21,22 +21,23 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Jennifer Bryan \email{jenny@rstudio.com}
+\strong{Maintainer}: Jennifer Bryan \email{jenny@rstudio.com} (0000-0002-6983-2759)
 
 Authors:
 \itemize{
-  \item Hadley Wickham \email{hadley@rstudio.com}
+  \item Hadley Wickham \email{hadley@rstudio.com} (0000-0003-4757-117X)
 }
 
 Other contributors:
 \itemize{
   \item RStudio (Copyright holder of
-      all R code and all C/C++ code without explicit copyright attribution) [copyright holder]
+      all R code and all C/C++ code without explicit copyright attribution) [copyright holder, funder]
   \item Marcin Kalicinski (Author of included RapidXML code) [contributor, copyright holder]
   \item Komarov Valery (Author of included libxls code) [contributor, copyright holder]
   \item Christophe Leitienne (Author of included libxls code) [contributor, copyright holder]
   \item Bob Colbert (Author of included libxls code) [contributor, copyright holder]
   \item David Hoerl (Author of included libxls code) [contributor, copyright holder]
+  \item Evan Miller (Author of included libxls code) [contributor, copyright holder]
 }
 
 }

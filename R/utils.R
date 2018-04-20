@@ -1,21 +1,18 @@
 check_file <- function(path) {
-  if (!file.exists(path)) {
-    stop("'", path, "' does not exist",
-      if (!is_absolute_path(path))
-        paste0(" in current working directory ('", getwd(), "')"),
-      ".",
-      call. = FALSE)
+  if (!is_string(path)) {
+    stop("`path` must be a string", call. = FALSE)
   }
 
-  normalizePath(path, "/", mustWork = FALSE)
+  if (!file.exists(path)) {
+    stop("`path` does not exist: ", sQuote(path), call. = FALSE)
+  }
+  path
 }
-
-is_absolute_path <- function(path) {
-  grepl("^(/|[A-Za-z]:|\\\\|~)", path)
-}
-
-isFALSE <- function(x) identical(x, FALSE)
 
 is_integerish <- function(x) {
   floor(x) == x
+}
+
+is_string <- function(x) {
+  length(x) == 1 && is.character(x)
 }

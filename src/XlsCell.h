@@ -1,6 +1,7 @@
 #ifndef READXL_XLSCELL_
 #define READXL_XLSCELL_
 
+#include <limits.h>
 #include <Rcpp.h>
 #include <libxls/xls.h>
 #include <libxls/xlstypes.h>
@@ -245,9 +246,9 @@ public:
       // examples: social security or student number
       double intpart;
       if (std::modf(cell_->d, &intpart) == 0.0) {
-        strs << std::fixed << (int)cell_->d;
+        strs << std::fixed << (int64_t)cell_->d;
       } else {
-        strs << cell_->d;
+        strs << std::setprecision(std::numeric_limits<double>::digits10 + 2) << cell_->d;
       }
       std::string out_string = strs.str();
       return out_string;
@@ -270,7 +271,7 @@ public:
     return out_string.empty() ? NA_STRING : Rf_mkCharCE(out_string.c_str(), CE_UTF8);
   }
 
-  int asInteger() const {
+  int asLogical() const {
     switch(type_) {
 
     case CELL_UNKNOWN:
