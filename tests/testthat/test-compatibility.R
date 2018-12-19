@@ -24,9 +24,7 @@ test_that("can tolerate xls that underreports number of columns", {
 ##   * Worksheet target paths are prefixed with `/xl/` (#294)
 ##   * Nonstandard XML namespace prefixes (#295)
 test_that("we can finally read Ekaterinburg", {
-  expect_silent(
-    ek <- read_excel(test_sheet("Ekaterinburg_IP_9.xlsx"), skip = 2)
-  )
+  ek <- read_excel(test_sheet("Ekaterinburg_IP_9.xlsx"), skip = 2)
   expect_identical(ek[[1, 2]], "27.05.2004")
 })
 
@@ -50,9 +48,7 @@ test_that("we can read the BIFF5, LABEL record sheet", {
 ## https://github.com/tidyverse/readxl/pull/429
 ## <c r="C2" s="1" t="str"><f>A2 + B2</f></c>
 test_that("formula cell with no v node does not cause crash", {
-  expect_silent(
-    df <- read_excel(test_sheet("missing-v-node-xlsx.xlsx"))
-  )
+  df <- read_excel(test_sheet("missing-v-node-xlsx.xlsx"))
   expect_identical(df$`A + B`, NA)
 })
 
@@ -61,7 +57,7 @@ test_that("formula cell with no v node does not cause crash", {
 ## LAPD uses a tool to produce xlsx that implements the minimal SpreadsheetML
 ## package structure described on pp65-66 of ECMA 5th edition
 test_that("we can read LAPD arrest sheets", {
-  expect_silent(
+  expect_error_free(
     lapd <- read_excel(test_sheet("los-angeles-arrests-xlsx.xlsx"), skip = 2)
   )
   expect_identical(dim(lapd), c(193L, 36L))

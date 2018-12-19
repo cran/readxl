@@ -4,10 +4,13 @@
 #include <Rcpp.h>
 #include <libxls/xls.h>
 #include "XlsWorkBook.h"
+#include "Spinner.h"
 #include "XlsCell.h"
 #include "ColSpec.h"
 #include "CellLimits.h"
 #include "utils.h"
+
+const int PROGRESS_TICK = 131072; // 2^17
 
 class XlsWorkSheet {
   // the host workbook
@@ -23,12 +26,13 @@ class XlsWorkSheet {
   std::string sheetName_;
   CellLimits nominal_, actual_;
   int ncol_, nrow_;
+  Spinner spinner_;
 
 public:
 
   XlsWorkSheet(const XlsWorkBook wb, int sheet_i,
-               Rcpp::IntegerVector limits, bool shim):
-  wb_(wb), nominal_(limits)
+               Rcpp::IntegerVector limits, bool shim, bool progress):
+  wb_(wb), nominal_(limits), spinner_(progress)
   {
     if (sheet_i >= wb.n_sheets()) {
       Rcpp::stop("Can't retrieve sheet in position %d, only %d sheet(s) found.",
@@ -36,14 +40,26 @@ public:
     }
     sheetName_ = wb.sheets()[sheet_i];
 
+    xls::xls_error_t error = xls::LIBXLS_OK;
     std::string path = wb_.path();
-    pWB_ = xls::xls_open(path.c_str(), "UTF-8");
-    pWS_ = xls_getWorkSheet(pWB_, sheet_i);
+    spinner_.spin();
+    pWB_ = xls_open_file(path.c_str(), "UTF-8", &error);
+    if (!pWB_) {
+      Rcpp::stop(
+        "\n  filepath: %s\n  libxls error: %s",
+        path,
+        xls::xls_getError(error)
+      );
+    }
+    spinner_.spin();
+
+    pWS_ = xls::xls_getWorkSheet(pWB_, sheet_i);
     if (pWS_ == NULL) {
       Rcpp::stop("Sheet '%s' (position %d): cannot be opened",
                  sheetName_, sheet_i + 1);
     }
     xls_parseWorkSheet(pWS_);
+    spinner_.spin();
     dateFormats_ = wb.dateFormats();
 
     // nominal_ holds user's geometry request
@@ -91,6 +107,10 @@ public:
                                 const bool trimWs,
                                 int guess_max = 1000,
                                 bool has_col_names = false) {
+    if (guess_max == 0) {
+      return types;
+    }
+
     std::vector<XlsCell>::iterator xcell;
     xcell = has_col_names ? advance_row(cells_) : cells_.begin();
 
@@ -105,10 +125,14 @@ public:
       type_known[j] = types[j] != COL_UNKNOWN;
     }
 
+    // count is for spinner and checking for interrupt
+    int count = 0;
     // base is row the data starts on **in the spreadsheet**
     int base = cells_.begin()->row() + has_col_names;
     while (xcell != cells_.end() && xcell->row() - base < guess_max) {
-      if ((xcell->row() - base + 1) % 1000 == 0) {
+      count++;
+      if (count % PROGRESS_TICK == 0) {
+        spinner_.spin();
         Rcpp::checkUserInterrupt();
       }
       int j = xcell->col() - actual_.minCol();
@@ -148,15 +172,21 @@ public:
       return cols;
     }
 
+    // count is for spinner and checking for interrupt
+    int count = 0;
     while (xcell != cells_.end()) {
 
       int i = xcell->row();
       int j = xcell->col();
       // col to write into
       int col = j - actual_.minCol();
-      if ((i + 1) % 1000 == 0) {
+
+      count++;
+      if (count % PROGRESS_TICK == 0) {
+        spinner_.spin();
         Rcpp::checkUserInterrupt();
       }
+
       if (types[col] == COL_SKIP) {
         xcell++;
         continue;
@@ -306,6 +336,9 @@ private:
       return;
     }
 
+    // count is for spinner and checking for interrupt
+    int count = 0;
+
     int nominal_ncol = pWS_->rows.lastcol;
     int nominal_nrow = pWS_->rows.lastrow;
 
@@ -319,6 +352,11 @@ private:
       }
 
       for (xls::WORD j = 0; j <= nominal_ncol; ++j) {
+        count++;
+        if (count % PROGRESS_TICK == 0) {
+          spinner_.spin();
+          Rcpp::checkUserInterrupt();
+        }
 
         if (nominal_needs_checking) {
           cell = xls_cell(pWS_, (xls::WORD) i, j);

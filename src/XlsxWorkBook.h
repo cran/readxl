@@ -260,12 +260,17 @@ private:
     for (rapidxml::xml_node<>* string = sst->first_node();
          string; string = string->next_sibling()) {
       std::string out;
-      parseString(string, &out);    // missing strings are treated as empty
-      stringTable_.push_back(out);
+      if (parseString(string, &out)) {
+        stringTable_.push_back(out);
+      }
     }
   }
 
   void cacheDateFormats() {
+    if (!zip_has_file(path_, rel_.part("styles"))) {
+      return;
+    }
+
     std::string stylesXml = zip_buffer(path_, rel_.part("styles"));
     rapidxml::xml_document<> styles;
     styles.parse<rapidxml::parse_strip_xml_namespaces>(&stylesXml[0]);
