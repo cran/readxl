@@ -1,7 +1,7 @@
-c2b75ef9dbe47d0be6c5c404688ead11 *DESCRIPTION
+c41a2bcd100169d75717bebfbf1b1244 *DESCRIPTION
 649f255cd07b5c31b23b75c6e64e6e77 *LICENSE.note
 fd829f1e80e0a2fae9a78a400cc2b6e6 *NAMESPACE
-d15908cab1e32831e44a92d98d4efe02 *NEWS.md
+994dcc81e0fabaed72a814363e309575 *NEWS.md
 75aab0962392e3516bb1aafafb389c12 *R/RcppExports.R
 deac946a4d631957e08f5e7876f3fda3 *R/cell-specification.R
 fa1193df7511b89f9a836be71861970a *R/example.R
@@ -12,14 +12,14 @@ d6fa50c1bd0ea0c544375715c9274120 *R/read_excel.R
 b4fe12876c37f8a22cde06e9701eecf0 *R/readxl.R
 13d9edcda97dcff96a707ad1a4458439 *R/utils.R
 1e192abda26e50fbc77cffd77a278b91 *R/xlsx-zip.R
-0dd665a488d1f132f59b0cca1e0714fd *README.md
+92e5a6bd71a4176a1b6b2cf4c276611b *README.md
 fe671de7df866cbce2bd3ffd6f8938a9 *build/vignette.rds
 ab0ac8923cbe38018bf6dae9b4c12a02 *inst/doc/cell-and-column-types.R
 d945e641f9541a0ba07d3d2bc2ff4cca *inst/doc/cell-and-column-types.Rmd
-c40f66d296cad2a7b58f65c7004d4925 *inst/doc/cell-and-column-types.html
+f6a9b5ca65be1792899d87793a71f4b8 *inst/doc/cell-and-column-types.html
 f732a6aa4fac11bc2020065f7f5bb15f *inst/doc/sheet-geometry.R
 07709c0c944e233728040d3a7bdcb6c6 *inst/doc/sheet-geometry.Rmd
-dad19b3dea1ee593f2b93d4071826ef2 *inst/doc/sheet-geometry.html
+e9056fae7e8389e40fd8ab2800e23789 *inst/doc/sheet-geometry.html
 0926fd270eadb9855b99c4c8312e7580 *inst/extdata/clippy.xls
 23e4ef54a85bdd4c9e485c56d12f8080 *inst/extdata/clippy.xlsx
 5611040674e27c7429877740235d4381 *inst/extdata/datasets.xls
@@ -35,7 +35,7 @@ a10172b18f9fa0394e3d241c2c167dda *man/excel_format.Rd
 f42c358a304701fbd39426e0b8dd518e *man/excel_sheets.Rd
 c044a37e3e9f3b4345bd43072c410573 *man/figures/logo.png
 d42cc1e0d638d814b3c45c7e5bbecd06 *man/read_excel.Rd
-438fa3624afcc507928f7a24a55b0b72 *man/readxl-package.Rd
+ce10f811bacb05b0a2f3b0a3c103f0f3 *man/readxl-package.Rd
 953d99864dfdea591fe4a60f0c05a25a *man/readxl_example.Rd
 8ab364897a1e08f1e74e95eb947c6d6f *man/readxl_progress.Rd
 56c8849b362361d83147c5e8c8ced374 *src/CellLimits.h
@@ -144,7 +144,7 @@ b2d6a9e15fc0aa6ec3c0696894eb30a2 *tests/testthat/sheets/utf8-sheet-names.xlsx
 3091acd18bce1ad4b4ebf3a6b0e25b16 *tests/testthat/sheets/whitespace-xls.xls
 78337792e9720d4f3ed495b7a218f6f4 *tests/testthat/sheets/whitespace-xlsx.xlsx
 eaa32df15ab8c71c2d01fdba645d0338 *tests/testthat/test-coercion.R
-14a04cd64af6b47122de8c66288dc4b5 *tests/testthat/test-col-names.R
+b9fa076eb041e935c2150dfca212fd0a *tests/testthat/test-col-names.R
 978871755634be4c7b5d47eb724bb908 *tests/testthat/test-col-types.R
 be158a023e9cd331f763874c6081b243 *tests/testthat/test-compatibility.R
 6ad12b226a3ff40a2ad78f130bd16a22 *tests/testthat/test-dates.R
