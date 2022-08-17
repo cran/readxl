@@ -1,6 +1,6 @@
 Package: readxl
 Title: Read Excel Files
-Version: 1.4.0
+Version: 1.4.1
 Authors@R: c(
     person("Hadley", "Wickham", , "hadley@rstudio.com", role = "aut",
            comment = c(ORCID = "0000-0003-4757-117X")),
@@ -37,10 +37,10 @@ Config/Needs/website: tidyverse/tidytemplate, tidyverse, devtools
 Config/testthat/edition: 3
 Encoding: UTF-8
 Note: libxls v1.6.2 4482400
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 SystemRequirements: C++11
 NeedsCompilation: yes
-Packaged: 2022-03-28 17:49:29 UTC; jenny
+Packaged: 2022-08-17 14:30:18 UTC; jenny
 Author: Hadley Wickham [aut] (<https://orcid.org/0000-0003-4757-117X>),
   Jennifer Bryan [aut, cre] (<https://orcid.org/0000-0002-6983-2759>),
   RStudio [cph, fnd] (Copyright holder of all R code and all C/C++ code
@@ -53,4 +53,4 @@ Author: Hadley Wickham [aut] (<https://orcid.org/0000-0003-4757-117X>),
   Evan Miller [ctb, cph] (Author of included libxls code)
 Maintainer: Jennifer Bryan <jenny@rstudio.com>
 Repository: CRAN
-Date/Publication: 2022-03-28 18:30:02 UTC
+Date/Publication: 2022-08-17 15:50:02 UTC
