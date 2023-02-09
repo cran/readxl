@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Import excel files into R. Supports '.xls' via the embedded 'libxls' C library \url{https://github.com/libxls/libxls} and '.xlsx' via the embedded 'RapidXML' C++ library \url{http://rapidxml.sourceforge.net}. Works on Windows, Mac and Linux without external dependencies.
+Import excel files into R. Supports '.xls' via the embedded 'libxls' C library \url{https://github.com/libxls/libxls} and '.xlsx' via the embedded 'RapidXML' C++ library \url{https://rapidxml.sourceforge.net/}. Works on Windows, Mac and Linux without external dependencies.
 }
 \seealso{
 Useful links:
@@ -20,16 +20,16 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Jennifer Bryan \email{jenny@rstudio.com} (\href{https://orcid.org/0000-0002-6983-2759}{ORCID})
+\strong{Maintainer}: Jennifer Bryan \email{jenny@posit.co} (\href{https://orcid.org/0000-0002-6983-2759}{ORCID})
 
 Authors:
 \itemize{
-  \item Hadley Wickham \email{hadley@rstudio.com} (\href{https://orcid.org/0000-0003-4757-117X}{ORCID})
+  \item Hadley Wickham \email{hadley@posit.co} (\href{https://orcid.org/0000-0003-4757-117X}{ORCID})
 }
 
 Other contributors:
 \itemize{
-  \item RStudio (Copyright holder of all R code and all C/C++ code without explicit copyright attribution) [copyright holder, funder]
+  \item Posit, PBC (Copyright holder of all R code and all C/C++ code without explicit copyright attribution) [copyright holder, funder]
   \item Marcin Kalicinski (Author of included RapidXML code) [contributor, copyright holder]
   \item Komarov Valery (Author of included libxls code) [contributor, copyright holder]
   \item Christophe Leitienne (Author of included libxls code) [contributor, copyright holder]
