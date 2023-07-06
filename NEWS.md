@@ -1,3 +1,7 @@
+# readxl 1.4.3
+
+This release contains no user-facing changes.
+
 # readxl 1.4.2
 
 This release contains no user-facing changes.
