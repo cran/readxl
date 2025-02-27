@@ -1,3 +1,13 @@
+# readxl 1.4.4
+
+This release contains no user-facing changes.
+
+* readxl embeds libxls v1.6.3, with release notes at
+  <https://github.com/libxls/libxls/releases/tag/v1.6.3>.
+  This version of libxls fixes several vulnerabilities.
+* Other small internal changes have been made to comply with CRAN requests,
+  such as avoiding the use of `Rf_StringTrue()`.
+
 # readxl 1.4.3
 
 This release contains no user-facing changes.

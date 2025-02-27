@@ -9,9 +9,9 @@ options(tibble.print_min = 4, tibble.print_max = 4)
 library(readxl)
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  read_excel("yo.xlsx")
-#  read_excel("yo.xlsx", col_types = "numeric")
-#  read_excel("yo.xlsx", col_types = c("date", "skip", "guess", "numeric"))
+# read_excel("yo.xlsx")
+# read_excel("yo.xlsx", col_types = "numeric")
+# read_excel("yo.xlsx", col_types = c("date", "skip", "guess", "numeric"))
 
 ## -----------------------------------------------------------------------------
 read_excel(readxl_example("deaths.xlsx"), range = cell_rows(5:15))

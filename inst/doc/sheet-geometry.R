@@ -9,13 +9,13 @@ options(tibble.print_min = 4, tibble.print_max = 4)
 library(readxl)
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  read_excel("yo.xlsx", skip = 5)
-#  read_excel("yo.xlsx", n_max = 100)
-#  read_excel("yo.xlsx", skip = 5, n_max = 100)
-#  read_excel("yo.xlsx", range = "C1:E7")
-#  read_excel("yo.xlsx", range = cell_rows(6:23))
-#  read_excel("yo.xlsx", range = cell_cols("B:D"))
-#  read_excel("yo.xlsx", range = anchored("C4", dim = c(3, 2)))
+# read_excel("yo.xlsx", skip = 5)
+# read_excel("yo.xlsx", n_max = 100)
+# read_excel("yo.xlsx", skip = 5, n_max = 100)
+# read_excel("yo.xlsx", range = "C1:E7")
+# read_excel("yo.xlsx", range = cell_rows(6:23))
+# read_excel("yo.xlsx", range = cell_cols("B:D"))
+# read_excel("yo.xlsx", range = anchored("C4", dim = c(3, 2)))
 
 ## ----out.width = '70%', echo = FALSE------------------------------------------
 knitr::include_graphics("img/geometry.png")
@@ -45,18 +45,18 @@ knitr::include_graphics("img/geometry.png")
 read_excel(readxl_example("geometry.xlsx"), range = "A2:C4")
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  ## rows only
-#  read_excel(..., range = cell_rows(1:10))
-#  ## is equivalent to
-#  read_excel(..., range = cell_rows(c(1, 10)))
-#  
-#  ## columns only
-#  read_excel(..., range = cell_cols(1:26))
-#  ## is equivalent to all of these
-#  read_excel(..., range = cell_cols(c(1, 26)))
-#  read_excel(..., range = cell_cols("A:Z"))
-#  read_excel(..., range = cell_cols(LETTERS))
-#  read_excel(..., range = cell_cols(c("A", "Z"))
+# ## rows only
+# read_excel(..., range = cell_rows(1:10))
+# ## is equivalent to
+# read_excel(..., range = cell_rows(c(1, 10)))
+# 
+# ## columns only
+# read_excel(..., range = cell_cols(1:26))
+# ## is equivalent to all of these
+# read_excel(..., range = cell_cols(c(1, 26)))
+# read_excel(..., range = cell_cols("A:Z"))
+# read_excel(..., range = cell_cols(LETTERS))
+# read_excel(..., range = cell_cols(c("A", "Z"))
 
 ## -----------------------------------------------------------------------------
 read_excel(readxl_example("geometry.xlsx"), range = cell_rows(4:8))
