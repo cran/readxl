@@ -1,8 +1,8 @@
-c3fc5dec849126edbbdf36129e6ca477 *DESCRIPTION
+20584ab570cd732f21ed4e30350ab68f *DESCRIPTION
 e27946ccd816733f78534cfca6d9f58e *LICENSE
 649f255cd07b5c31b23b75c6e64e6e77 *LICENSE.note
 27f67e77c2508560a509e361be260fae *NAMESPACE
-6bbaf2ba91b9215b52f83bad16221a15 *NEWS.md
+08ea612547659739ced5da75a47ffd3a *NEWS.md
 af13fad6c33c15124fa10901641edb45 *R/cell-specification.R
 b6a023bd562d106f127a1a5a5e7823a0 *R/cpp11.R
 fa1193df7511b89f9a836be71861970a *R/example.R
@@ -68,9 +68,9 @@ d9e9366a7849b7d5eec42f7cad7e3349 *src/libxls/brdb.h
 f0047ddd0a99cd8e2fda361e28229987 *src/libxls/locale.h
 28041aaa6cf0619034c9ba81ee40ae5f *src/libxls/ole.c
 dfb806b036c75e52c878b50a04c29862 *src/libxls/ole.h
-f9dddf3ec84b990596fa338de22fa506 *src/libxls/xls.c
+2a8c650ca6dd2e204acfa43d4769f58b *src/libxls/xls.c
 1040d0d382c0a3627b4930b61e96d7a7 *src/libxls/xls.h
-16df8fe2c75b272f2a7f89bfe807cfcf *src/libxls/xlsstruct.h
+86418bf3885a39ba7fd917543864f5e4 *src/libxls/xlsstruct.h
 cae574b277062079692455acc028d862 *src/libxls/xlstool.c
 9fdd5454117dbeff73d0e64b93865d6f *src/libxls/xlstool.h
 310986df8b971d1bd2a71ebbe349a1dc *src/libxls/xlstypes.h
