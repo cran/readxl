@@ -1,13 +1,5 @@
 #pragma once
 
-#include "CellLimits.h"
-#include "Spinner.h"
-#include "XlsCell.h"
-#include "XlsWorkBook.h"
-
-#include "libxls/xls.h"
-#include "libxls/xlsstruct.h"
-
 #include "cpp11/as.hpp"
 #include "cpp11/integers.hpp"
 #include "cpp11/list.hpp"
@@ -15,6 +7,14 @@
 #include "cpp11/R.hpp"
 #include "cpp11/sexp.hpp"
 #include "cpp11/strings.hpp"
+
+#include "libxls/xls.h"
+#include "libxls/xlsstruct.h"
+
+#include "CellLimits.h"
+#include "Spinner.h"
+#include "XlsCell.h"
+#include "XlsWorkBook.h"
 
 class XlsCellSet {
   // xls specifics
@@ -44,8 +44,7 @@ public:
     spinner_.spin();
     pWB_ = xls_open_file(wb.path().c_str(), "UTF-8", &error);
     if (!pWB_) {
-      Rf_errorcall(
-        R_NilValue,
+      cpp11::stop(
         "\n  filepath: %s\n  libxls error: %s",
         wb.path().c_str(),
         xls::xls_getError(error)
@@ -60,8 +59,7 @@ public:
     }
     error = xls::xls_parseWorkSheet(pWS_);
     if (error != xls::LIBXLS_OK) {
-      Rf_errorcall(
-        R_NilValue,
+      cpp11::stop(
         "\n  filepath: %s\n  sheet: %s\n  libxls error: %s",
         wb.path().c_str(),
         sheetName_.c_str(),

@@ -1,13 +1,13 @@
 #pragma once
 
-#include "ColSpec.h"
+#include "cpp11/R.hpp"
+#include "cpp11/r_string.hpp"
+#include "cpp11/strings.hpp"
 
 #include "libxls/xls.h"
 #include "libxls/xlsstruct.h"
 
-#include "cpp11/R.hpp"
-#include "cpp11/r_string.hpp"
-#include "cpp11/strings.hpp"
+#include "ColSpec.h"
 
 class XlsWorkBook {
 
@@ -36,8 +36,7 @@ public:
     xls::xls_error_t error = xls::LIBXLS_OK;
     xls::xlsWorkBook* pWB_ = xls::xls_open_file(path_.c_str(), "UTF-8", &error);
     if (!pWB_) {
-      Rf_errorcall(
-        R_NilValue,
+      cpp11::stop(
         "\n  filepath: %s\n  libxls error: %s",
         path_.c_str(),
         xls::xls_getError(error)
